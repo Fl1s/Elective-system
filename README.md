@@ -41,6 +41,11 @@ db.pool.size=5
 - **Runners**: Entry points to run the application (e.g., `JdbcRunner`, `DaoRunner`).
 - **Util**: Utility classes for database connections (`ConnectionManager`).
 
+<div style="float: right; width: 300px; height: 500px; margin-left: 20px;">
+  <img src="ProjectStructure.png" width="180" height="380" />
+</div>
+
+
 ## Build and Run
 1. **Navigate to the project directory**:
    ```bash
