@@ -3,7 +3,7 @@ package org.example.entity;
 public class StudentEntity {
     private int studentId;
     private String studentName;
-    private CourseEntity studentCourse;
+    private String studentCourse;
     private double studentGrade;
 
     public StudentEntity(int studentId, String studentName, String studentCourse, double studentGrade) {
@@ -36,12 +36,12 @@ public class StudentEntity {
         return studentCourse;
     }
 
-    public void setStudentCourse(CourseEntity studentCourse) {
+    public void setStudentCourse(String studentCourse) {
         this.studentCourse = studentCourse;
     }
 
     public float getStudentGrade() {
-        return studentGrade;
+        return (float) studentGrade;
     }
 
     public void setStudentGrade(double studentGrade) {

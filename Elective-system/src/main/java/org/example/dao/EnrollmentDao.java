@@ -37,7 +37,7 @@ public class EnrollmentDao {
         return INSTANCE;
     }
 
-    public EnrollmentEntity create(EnrollmentEntity entity) {
+    public EnrollmentEntity save(EnrollmentEntity entity) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE_SQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, entity.getStudentId());
@@ -56,7 +56,7 @@ public class EnrollmentDao {
         }
     }
 
-    public List<EnrollmentEntity> getAll() {
+    public List<EnrollmentEntity> findAll() {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(READ_SQL)) {
 
@@ -72,7 +72,7 @@ public class EnrollmentDao {
         }
     }
 
-    public Optional<EnrollmentEntity> getEntityById(int id) {
+    public Optional<EnrollmentEntity> findById(int id) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(READ_SQL + " WHERE enrollment_id = ?")) {
             preparedStatement.setInt(1, id);

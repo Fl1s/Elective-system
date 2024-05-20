@@ -44,7 +44,7 @@ public class EnrollmentEntity {
     }
 
     public Date getEnrollmentDate() {
-        return enrollmentDate;
+        return Date.valueOf(enrollmentDate);
     }
 
     public void setEnrollmentDate(LocalDate enrollmentDate) {

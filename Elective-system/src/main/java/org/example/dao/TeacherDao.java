@@ -37,7 +37,7 @@ public class TeacherDao {
         return INSTANCE;
     }
 
-    public TeacherEntity create(TeacherEntity entity) {
+    public TeacherEntity save(TeacherEntity entity) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE_SQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, entity.getTeacherName());
@@ -54,7 +54,7 @@ public class TeacherDao {
         }
     }
 
-    public List<TeacherEntity> getAll() {
+    public List<TeacherEntity> findAll() {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(READ_SQL)) {
 
@@ -70,7 +70,7 @@ public class TeacherDao {
         }
     }
 
-    public Optional<TeacherEntity> getEntityById(int id) {
+    public Optional<TeacherEntity> findById(int id) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(READ_SQL + " WHERE teacher_id = ?")) {
             preparedStatement.setInt(1, id);

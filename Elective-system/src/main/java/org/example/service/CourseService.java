@@ -11,12 +11,28 @@ import java.sql.Date;
 import java.util.List;
 
 public class CourseService {
-    private final CourseDao coursesDao = CourseDao.getInstance();
+    private final CourseDao courseDao = CourseDao.getInstance();
     private final EnrollmentDao EnrollmentDao = org.example.dao.EnrollmentDao.getInstance();
     private final ArchiveDao archiveDao = ArchiveDao.getInstance();
 
     public void announceCourse(CourseEntity course) {
-        coursesDao.create(course);
+        courseDao.save(course);
+    }
+
+    public CourseEntity addCourse(CourseEntity course) {
+        return courseDao.save(course);
+    }
+
+    public CourseEntity getCourseById(int id) {
+        return courseDao.findById(id).orElse(null);
+    }
+
+    public void updateCourse(CourseEntity course) {
+        courseDao.update(course);
+    }
+
+    public void deleteCourse(int id) {
+        courseDao.delete(id);
     }
 
     public void enrollStudent(int studentId, int courseId) {
@@ -25,7 +41,7 @@ public class CourseService {
         enrollment.setCourseId(courseId);
         enrollment.setEnrollmentDate(new Date(System.currentTimeMillis()).toLocalDate());
 
-        EnrollmentDao.create(enrollment);
+        EnrollmentDao.save(enrollment);
     }
 
     public void gradeStudent(int enrollmentId, double grade) {
@@ -34,14 +50,14 @@ public class CourseService {
         archive.setGrade(grade);
         archive.setArchiveDate(new java.sql.Date(System.currentTimeMillis()));
 
-        archiveDao.create(archive);
+        archiveDao.save(archive);
     }
 
     public List<CourseEntity> getAllCourses() {
-        return coursesDao.getAll();
+        return courseDao.findAll();
     }
 
     public List<EnrollmentEntity> getAllEnrollments() {
-        return EnrollmentDao.getAll();
+        return EnrollmentDao.findAll();
     }
 }

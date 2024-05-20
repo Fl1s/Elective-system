@@ -15,25 +15,25 @@ import org.util.ConnectionManager;
 
 public class ArchiveDao {
     private static final ArchiveDao INSTANSE = new ArchiveDao();
-    private static final String CREATE_PSQL = """
+    private static final String CREATE_SQL = """
             INSERT INTO archives(enrollment_id, grade, archive_date)
             VALUES(?,?,?)
             """;
-    private static final String READ_PSQL = """
+    private static final String READ_SQL = """
             SELECT archive_id,
                    enrollment_id,
                    grade,
                    archive_date
             FROM archives
             """;
-    private static final String UPDATE_PSQL = """
+    private static final String UPDATE_SQL = """
             UPDATE archives
             SET enrollment_id = ?,
                 grade = ?,
                 archive_date = ?
             WHERE archive_id = ?
             """;
-    private static final String DELETE_PSQL = """
+    private static final String DELETE_SQL = """
             DELETE
             FROM archives
             WHERE archive_id = ?
@@ -46,9 +46,9 @@ public class ArchiveDao {
         return INSTANSE;
     }
 
-    public ArchiveEntity create(ArchiveEntity entity) {
+    public ArchiveEntity save(ArchiveEntity entity) {
         try (Connection connection = ConnectionManager.get();
-             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_PSQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_SQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, entity.getArchiveId());
             preparedStatement.setInt(2, entity.getEnrollmentId());
             preparedStatement.setDouble(3, entity.getGrade());
@@ -65,9 +65,9 @@ public class ArchiveDao {
         }
     }
 
-    public List<ArchiveEntity> getAll() {
+    public List<ArchiveEntity> findAll() {
         try (Connection connection = ConnectionManager.get();
-             PreparedStatement preparedStatement = connection.prepareStatement(READ_PSQL)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(READ_SQL)) {
 
             ResultSet set = preparedStatement.executeQuery();
             List<ArchiveEntity> archives = new ArrayList<>();
@@ -81,9 +81,9 @@ public class ArchiveDao {
         }
     }
 
-    public Optional<ArchiveEntity> getEntityById(ArchiveEntity id) {
+    public Optional<ArchiveEntity> findById(ArchiveEntity id) {
         try (Connection connection = ConnectionManager.get();
-             PreparedStatement preparedStatement = connection.prepareStatement(READ_PSQL)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(READ_SQL)) {
             preparedStatement.setObject(1, id);
             ResultSet set = preparedStatement.executeQuery();
 
@@ -99,7 +99,7 @@ public class ArchiveDao {
 
     public ArchiveEntity update(ArchiveEntity entity) {
         try (Connection conn = ConnectionManager.get();
-             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_PSQL)) {
+             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_SQL)) {
             preparedStatement.setInt(1, entity.getEnrollmentId());
             preparedStatement.setDouble(2, entity.getGrade());
             preparedStatement.setDate(3, entity.getArchiveDate());
@@ -114,7 +114,7 @@ public class ArchiveDao {
 
     public boolean delete(int archive_id) {
         try (Connection conn = ConnectionManager.get();
-        PreparedStatement preparedStatement = conn.prepareStatement(DELETE_PSQL)) {
+        PreparedStatement preparedStatement = conn.prepareStatement(DELETE_SQL)) {
             preparedStatement.setInt(1, archive_id);
 
             return preparedStatement.executeUpdate() > 0;

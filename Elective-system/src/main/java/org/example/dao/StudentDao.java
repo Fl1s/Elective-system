@@ -37,7 +37,7 @@ public class StudentDao {
         return INSTANCE;
     }
 
-    public StudentEntity create(StudentEntity entity) {
+    public StudentEntity save(StudentEntity entity) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE_SQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, entity.getStudentName());
@@ -56,7 +56,7 @@ public class StudentDao {
         }
     }
 
-    public List<StudentEntity> getAll() {
+    public List<StudentEntity> findAll() {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(READ_SQL)) {
 
@@ -72,7 +72,7 @@ public class StudentDao {
         }
     }
 
-    public Optional<StudentEntity> getEntityById(int id) {
+    public Optional<StudentEntity> findById(int id) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(READ_SQL + " WHERE student_id = ?")) {
             preparedStatement.setInt(1, id);

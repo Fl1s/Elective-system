@@ -31,13 +31,14 @@ public class CourseDao {
             WHERE course_id = ?
             """;
 
-    private CourseDao() {}
+    private CourseDao() {
+    }
 
     public static CourseDao getInstance() {
         return INSTANCE;
     }
 
-    public CourseEntity create(CourseEntity entity) {
+    public CourseEntity save(CourseEntity entity) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE_SQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, entity.getCourseName());
@@ -55,7 +56,7 @@ public class CourseDao {
         }
     }
 
-    public List<CourseEntity> getAll() {
+    public List<CourseEntity> findAll() {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(READ_SQL)) {
 
@@ -71,7 +72,7 @@ public class CourseDao {
         }
     }
 
-    public Optional<CourseEntity> getEntityById(int id) {
+    public Optional<CourseEntity> findById(int id) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(READ_SQL + " WHERE course_id = ?")) {
             preparedStatement.setInt(1, id);
@@ -101,16 +102,44 @@ public class CourseDao {
         return entity;
     }
 
-    public boolean delete(int courseId) {
-        try (Connection conn = ConnectionManager.get();
-             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_SQL)) {
-            preparedStatement.setInt(1, courseId);
+    public void delete(int courseId) throws DaoException {
+        Connection connection = ConnectionManager.get();
+        try {
+            connection.setAutoCommit(false);
 
-            return preparedStatement.executeUpdate() > 0;
+            try (PreparedStatement deleteArchives = connection.prepareStatement(
+                    "DELETE FROM archives WHERE enrollment_id IN (SELECT enrollment_id FROM enrollments WHERE course_id = ?)")) {
+                deleteArchives.setInt(1, courseId);
+                deleteArchives.executeUpdate();
+            }
+
+            try (PreparedStatement deleteEnrollments = connection.prepareStatement("DELETE FROM enrollments WHERE course_id = ?")) {
+                deleteEnrollments.setInt(1, courseId);
+                deleteEnrollments.executeUpdate();
+            }
+
+            try (PreparedStatement deleteCourse = connection.prepareStatement(DELETE_SQL)) {
+                deleteCourse.setInt(1, courseId);
+                deleteCourse.executeUpdate();
+            }
+
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackException) {
+                throw new DaoException(rollbackException);
+            }
             throw new DaoException(e);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException autoCommitException) {
+                throw new DaoException(autoCommitException);
+            }
         }
     }
+
 
     private static CourseEntity buildCourse(ResultSet set) throws SQLException {
         return new CourseEntity(

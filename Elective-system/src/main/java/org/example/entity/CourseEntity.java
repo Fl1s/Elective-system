@@ -3,7 +3,7 @@ package org.example.entity;
 public class CourseEntity {
     private int courseId;
     private String courseName;
-    private TeacherEntity teacherId;
+    private int teacherId;
 
     public CourseEntity(int courseId, String courseName, int teacherId) {
         this.courseId = courseId;
@@ -34,7 +34,7 @@ public class CourseEntity {
         return teacherId;
     }
 
-    public void setTeacherId(TeacherEntity teacherId) {
+    public void setTeacherId(int teacherId) {
         this.teacherId = teacherId;
     }
 
