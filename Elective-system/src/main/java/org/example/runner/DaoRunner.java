@@ -43,8 +43,7 @@ public class DaoRunner {
 
     private static void deleteTest(int studentId) {
         StudentDao studentDao = StudentDao.getInstance();
-        boolean deleteResult = studentDao.delete(studentId);
-        System.out.println("Delete result: " + deleteResult);
+        studentDao.delete(studentId);
     }
 
     private static void saveTest() {
