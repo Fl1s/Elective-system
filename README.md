@@ -3,9 +3,9 @@
 Elective-system is a Java-based web application for managing course enrollments. It allows instructors to create courses, students to enroll, and both to manage grades. The system uses PostgreSQL for data storage and relies on JDBC and DAO patterns for database interaction.
 
 ## Features
-- Course creation and management by instructors.
+- Course creation and management by teachers.
 - Student enrollment in courses.
-- Grade management by instructors.
+- Grade management by teachers.
 - Persistent data storage using PostgreSQL.
 
 ## Prerequisites
