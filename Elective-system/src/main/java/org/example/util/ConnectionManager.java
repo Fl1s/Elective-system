@@ -1,4 +1,4 @@
-package org.util;
+package org.example.util;
 
 import org.example.util.PropertiesUtil;
 

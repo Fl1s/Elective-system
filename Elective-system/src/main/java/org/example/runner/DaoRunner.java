@@ -7,13 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class DaoRunner {
-
     public static void main(String[] args) {
-        findAllTest();
-        saveTest();
-        updateTest();
-        testSelect(1);
-        deleteTest(1);
+        
     }
 
     private static void findAllTest() {
